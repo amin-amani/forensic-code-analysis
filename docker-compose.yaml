@@ -4,6 +4,8 @@ services:
     build:
       dockerfile: Dockerfile
     container_name: code-sense
+    ports:
+      - "8888:8888"  
     volumes:
       - .:/home
     tty: true
