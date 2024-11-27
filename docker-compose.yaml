@@ -1,0 +1,9 @@
+services:
+  ubuntu-hotspot:
+    image: ubuntu-code-sense
+    build:
+      dockerfile: Dockerfile
+    container_name: code-sense
+    volumes:
+      - .:/home/app
+    tty: true
