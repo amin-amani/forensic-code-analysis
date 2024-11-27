@@ -5,5 +5,5 @@ services:
       dockerfile: Dockerfile
     container_name: code-sense
     volumes:
-      - .:/home/app
+      - .:/home
     tty: true
