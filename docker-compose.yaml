@@ -9,3 +9,15 @@ services:
     volumes:
       - .:/home
     tty: true
+
+  make_hotspot:
+    image: ubuntu-code-sense
+    build:
+      dockerfile: Dockerfile
+    container_name: code-sense-vis
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home
+    command: ["sh", "/home/vis.sh"]
+
