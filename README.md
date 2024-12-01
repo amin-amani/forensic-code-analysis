@@ -20,6 +20,10 @@ qs.csv > output.csv
 
 ```
 
+
+```
+docker-compose run --rm -it make_hotspot 
+```
 ```
  python3 -m http.server 8888
 ```

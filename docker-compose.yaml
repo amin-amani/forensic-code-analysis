@@ -18,6 +18,8 @@ services:
     ports:
       - "8888:8888"
     volumes:
+      - ${HOME}/.gitconfig:/home/${USER}/.gitconfig
       - .:/home
     command: ["sh", "/home/vis.sh"]
-
+    stdin_open: true  # Keep stdin open
+    tty: true         # Allocate a pseudo-TTY
