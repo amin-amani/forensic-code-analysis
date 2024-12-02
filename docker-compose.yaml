@@ -10,16 +10,28 @@ services:
       - .:/home
     tty: true
 
-  make_hotspot:
+  make-hotspot:
     image: ubuntu-code-sense
     build:
       dockerfile: Dockerfile
-    container_name: code-sense-vis
+    container_name: code-sense-make
+    volumes:
+      - ${HOME}/.gitconfig:/home/${USER}/.gitconfig
+      - .:/home
+    command: ["sh", "/home/make-hotspot.sh"]
+    stdin_open: true  # Keep stdin open
+    tty: true         # Allocate a pseudo-TTY
+
+  display-hotspot:
+    image: ubuntu-code-sense
+    build: 
+      dockerfile: Dockerfile
+    container_name: code-sense-display
     ports:
       - "8888:8888"
     volumes:
       - ${HOME}/.gitconfig:/home/${USER}/.gitconfig
       - .:/home
-    command: ["sh", "/home/vis.sh"]
-    stdin_open: true  # Keep stdin open
-    tty: true         # Allocate a pseudo-TTY
+    command: ["sh", "/home/display.sh"]
+
+
