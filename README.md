@@ -90,3 +90,11 @@ maat -l maat_evo.log -c git -a coupling -g maat_src_test_boundaries.txt
 entity,coupled,degree,average-revs
 Code,Test,69,181
 ```
+
+* 69: This is the degree of coupling between the "Code" and "Test" entities. It represents the percentage of commits where both "Code" and "Test" were changed together. In
+
+this specific case, it indicates that in 69% of all commits, a change to the application code (src/code_maat) was accompanied by a change to the test code (test/code_maat).
+
+* 181: This is the average number of revisions for the involved modules. It is calculated as a weighted number of total revisions for the "Code" and "Test" entities. The idea
+
+here is to filter out modules with too few revisions to avoid bias.
