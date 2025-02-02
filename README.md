@@ -51,4 +51,8 @@ docker-compose run --rm -it make_hotspot
 ```
  python3 -m http.server 8888
 ```
+check test and production code bandaries you shold put yot code into test and src nbefor this analys
 
+```
+maat -l maat_evo.log -c git -a coupling -g maat_src_test_boundaries.txt
+```
