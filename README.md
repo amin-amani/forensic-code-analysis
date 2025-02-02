@@ -55,6 +55,8 @@ docker-compose run --rm -it make_hotspot
 
 ### First, you must generate the git_evo.log file. This file contains the commit history of your project. You can generate it with a git log command. For example:
 
+use this repo for test [maat](git@github.com:adamtornhill/code-maat.git)
+
 ```
 git log --pretty=format:'[%h] %an %ad %s' --date=short --numstat > git_evo.log
 ```
