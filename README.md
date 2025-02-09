@@ -99,6 +99,22 @@ this specific case, it indicates that in 69% of all commits, a change to the app
 
 here is to filter out modules with too few revisions to avoid bias.
 
+## Build a Knowledge Map of Your System
+
+### Know the Uses and Misuses
+The knowledge map is useful to everyone on a project:
+
+* We developers use it to identify peers who can help out with code reviews, design discussions, and debugging tasks.
+
+* New project members use the knowledge as a communication aid.
+
+* Testers grab a digital copy of the map to find the developer who’s most likely to know about a particular feature.
+
+* Finally, technical leaders use the information to evaluate how well the system structure fits the team structure, 
+
+  identify knowledge loss, and ensure that we get the natural informal communication channels we need to write great code.
+
+
 ## get a summary of individual contributions
 
 ```
