@@ -98,3 +98,21 @@ this specific case, it indicates that in 69% of all commits, a change to the app
 * 181: This is the average number of revisions for the involved modules. It is calculated as a weighted number of total revisions for the "Code" and "Test" entities. The idea
 
 here is to filter out modules with too few revisions to avoid bias.
+
+## get a summary of individual contributions
+
+```
+maat -c git -l hib_evo.log -a entity-effort
+```
+result is:
+```
+entity,author,author-revs,total-revs
+...
+AbstractEntityPersister.java,Steve Ebersole,17,44
+AbstractEntityPersister.java,Brett Meyer,3,44
+AbstractEntityPersister.java,Rob Worsnop,5,44
+...
+AbstractEntityPersister.java,Gail Badner,4,44
+AbstractEntityPersister.java,Paweł Stawicki,1,44
+AbstractEntityPersister.java,Strong Liu,2,44
+```
