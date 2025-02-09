@@ -132,3 +132,15 @@ AbstractEntityPersister.java,Gail Badner,4,44
 AbstractEntityPersister.java,Paweł Stawicki,1,44
 AbstractEntityPersister.java,Strong Liu,2,44
 ```
+
+## calculate churn
+```
+maat -c git -l maat_evo.log -a abs-churn
+date,added,deleted
+2013-08-09,259,20
+2013-08-11,146,70
+2013-08-12,213,79
+2013-08-13,126,23
+2013-08-15,334,118
+...
+```
