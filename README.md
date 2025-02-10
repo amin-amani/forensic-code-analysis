@@ -1,7 +1,7 @@
 # forensic-code-analysis
 
 forensic code analysis based on "Your code as a crime scene"
-<a href="link"><img src="hotspot.png" alt="CCNA ||" width="800"/></a>
+<a href="https://amin-amani.github.io/hotspot-sample"><img src="hotspot.png" alt="CCNA ||" width="800"/></a>
 
 ## build hotspot from your project
 
