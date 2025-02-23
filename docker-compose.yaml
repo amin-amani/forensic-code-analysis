@@ -2,10 +2,11 @@ services:
   ubuntu-hotspot:
     image: ubuntu-code-sense
     build:
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: Dockerfile  
     container_name: code-sense
     ports:
-      - "8888:8888"  
+      - "8888:8888"
     volumes:
       - .:/home
     tty: true
@@ -13,25 +14,25 @@ services:
   make-hotspot:
     image: ubuntu-code-sense
     build:
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: Dockerfile  
     container_name: code-sense-make
     volumes:
       - ${HOME}/.gitconfig:/home/${USER}/.gitconfig
       - .:/home
     command: ["sh", "/home/make-hotspot.sh"]
-    stdin_open: true  # Keep stdin open
-    tty: true         # Allocate a pseudo-TTY
+    stdin_open: true  
+    tty: true         
 
   display-hotspot:
     image: ubuntu-code-sense
-    build: 
-      dockerfile: Dockerfile
+    build:
+      context: .  
+      dockerfile: Dockerfile  
     container_name: code-sense-display
     ports:
-      - "8888:8888"
+      - "8080:8888"
     volumes:
       - ${HOME}/.gitconfig:/home/${USER}/.gitconfig
       - .:/home
     command: ["sh", "/home/display.sh"]
-
-
