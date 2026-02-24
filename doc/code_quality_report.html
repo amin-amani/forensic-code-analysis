@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Code Quality Dashboard</title>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Zoom Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+
+<style>
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    background: #fafafa;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+.toolbar {
+    margin-bottom: 25px;
+}
+
+button {
+    padding: 8px 14px;
+    margin-right: 10px;
+    border: none;
+    background: #1976d2;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #125aa0;
+}
+
+canvas {
+    max-height: 420px;
+    margin-bottom: 50px;
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>📊 Code Quality History</h2>
+
+<div class="toolbar">
+    <button onclick="resetAllZoom()">🔄 Reset Zoom</button>
+</div>
+
+<canvas id="complexity"></canvas>
+<canvas id="loc"></canvas>
+<canvas id="static"></canvas>
+
+<script>
+
+/* ---------------- CSV LOADER ---------------- */
+
+async function loadCSV(path) {
+    const response = await fetch(path);
+    const text = await response.text();
+    const lines = text.trim().split("\n");
+    const headers = lines[0].split(",");
+
+    return lines.slice(1).map(line => {
+        const values = line.split(",");
+        let obj = {};
+        headers.forEach((h,i)=> obj[h]=values[i]);
+        return obj;
+    });
+}
+
+/* ---------------- DATA BUILD ---------------- */
+
+function buildData(rows) {
+    const DATA = {
+        commits: [],
+        labels: [],
+        max_complexity: [],
+        avg_complexity: [],
+        code_lines: [],
+        comment_lines: [],
+        blank_lines: [],
+        cppcheck_warnings: [],
+        cppcheck_errors: [],
+        clang_warnings: [],
+        clang_errors: []
+    };
+
+    rows.forEach(r => {
+        DATA.commits.push(r.commit);
+        DATA.labels.push(r.date);
+
+        Object.keys(DATA).forEach(k=>{
+            if(r[k] !== undefined && k !== "labels" && k !== "commits")
+                DATA[k].push(+r[k]);
+        });
+    });
+
+    return DATA;
+}
+
+/* ---------------- CHART FACTORY ---------------- */
+
+const charts = [];
+
+function createChart(canvasId, DATA, datasets, yLabel) {
+
+    const chart = new Chart(document.getElementById(canvasId), {
+        type: 'line',
+        data: { labels: DATA.labels, datasets: datasets },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+
+            plugins: {
+                legend: { position: 'top' },
+
+                tooltip: {
+                    callbacks: {
+                        title: (items)=>{
+                            const i = items[0].dataIndex;
+                            return `Commit ${DATA.commits[i]} — ${DATA.labels[i]}`;
+                        }
+                    }
+                },
+
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'x',
+                        modifierKey: 'ctrl'
+                    },
+                    zoom: {
+                        wheel: { enabled: true },
+                        pinch: { enabled: true },
+                        drag: {
+                            enabled: true,  // این فعال میکنه box zoom (ذره‌بین)
+                            backgroundColor: 'rgba(0,0,0,0.15)',
+                            borderColor: 'rgba(0,0,0,0.3)',
+                            borderWidth: 1
+                        },
+                        mode: 'x'
+                    }
+                },
+
+                decimation: {
+                    enabled: true,
+                    algorithm: 'lttb',
+                    samples: 200
+                }
+            },
+
+            scales: {
+                x: { ticks: { autoSkip: true, maxTicksLimit: 15 } },
+                y: { title: { display: true, text: yLabel } }
+            }
+        }
+    });
+
+    charts.push(chart);
+}
+
+/* ---------------- RESET ZOOM ---------------- */
+
+function resetAllZoom() {
+    charts.forEach(c => c.resetZoom());
+}
+
+/* ---------------- MAIN ---------------- */
+
+(async function(){
+    const rows = await loadCSV("code_quality_history.csv");
+    const DATA = buildData(rows);
+
+    createChart("complexity", DATA, [
+        { label:"Max Complexity", data:DATA.max_complexity, borderColor:'#d32f2f', backgroundColor:'rgba(211,47,47,0.1)' },
+        { label:"Avg Complexity", data:DATA.avg_complexity, borderColor:'#1976d2', backgroundColor:'rgba(25,118,210,0.1)' }
+    ], "Complexity");
+
+    createChart("loc", DATA, [
+        { label:"Code Lines", data:DATA.code_lines, borderColor:'#388e3c', backgroundColor:'rgba(56,142,60,0.1)' },
+        { label:"Comment Lines", data:DATA.comment_lines, borderColor:'#fbc02d', backgroundColor:'rgba(251,192,45,0.1)' },
+        { label:"Blank Lines", data:DATA.blank_lines, borderColor:'#7b1fa2', backgroundColor:'rgba(123,31,162,0.1)' }
+    ], "Lines");
+
+    createChart("static", DATA, [
+        { label:"Cppcheck Warnings", data:DATA.cppcheck_warnings, borderColor:'#ffa000', backgroundColor:'rgba(255,160,0,0.1)' },
+        { label:"Cppcheck Errors", data:DATA.cppcheck_errors, borderColor:'#f44336', backgroundColor:'rgba(244,67,54,0.1)' },
+        { label:"Clang Warnings", data:DATA.clang_warnings, borderColor:'#1976d2', backgroundColor:'rgba(25,118,210,0.1)' },
+        { label:"Clang Errors", data:DATA.clang_errors, borderColor:'#d32f2f', backgroundColor:'rgba(211,47,47,0.1)' }
+    ], "Count");
+
+})();
+</script>
+
+</body>
+</html>
